@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TorrentShare - P2P Serverless File Sharing</title>
+    
+    <!-- WebTorrent Library -->
+    <script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="theme-toggle">
+                <label for="darkMode">
+                    <i class="fas fa-moon"></i>
+                    <input type="checkbox" id="darkMode" class="toggle">
+                </label>
+            </div>
+            <div class="logo-container">
+                <i class="fas fa-share-nodes logo-icon"></i>
+                <div>
+                    <h1>TorrentShare</h1>
+                    <p class="tagline">P2P Serverless File Sharing</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-content">
+            <div class="content-grid">
+                <!-- Upload / Seed Section -->
+                <div class="card">
+                    <div class="section-header">
+                        <i class="fas fa-upload section-icon"></i>
+                        <h2>Share Files</h2>
+                    </div>
+                    
+                    <div class="upload-area" id="dropArea">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p>Drag & Drop files here or click to browse</p>
+                        <input type="file" id="fileInput" multiple>
+                        <label for="fileInput" class="btn btn-primary">Select Files</label>
+                    </div>
+
+                    <div id="uploadInfo" class="hidden">
+                        <div id="uploadProgress" class="progress-container">
+                            <div id="progressBar" class="progress-bar"></div>
+                            <div id="progressText" class="progress-text">0%</div>
+                        </div>
+                        
+                        <div class="info-box">
+                            <strong>Info Hash:</strong>
+                            <div id="infoHash" class="mono"></div>
+                        </div>
+                        
+                        <div class="info-box">
+                            <strong>Magnet Link:</strong>
+                            <div class="magnet-link-container" style="display: flex; gap: 10px; margin-top: 5px;">
+                                <input type="text" id="magnetLink" class="mono" readonly style="flex: 1; padding: 5px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--card-bg); color: var(--text-color);">
+                                <button id="copyMagnet" class="btn btn-small" title="Copy Magnet Link">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download / Leech Section -->
+                <div class="card">
+                    <div class="section-header">
+                        <i class="fas fa-download section-icon"></i>
+                        <h2>Download Files</h2>
+                    </div>
+
+                    <div class="download-input">
+                        <input type="text" id="torrentInput" placeholder="Paste Magnet Link or Info Hash here...">
+                        <button id="downloadBtn" class="btn btn-primary">Download</button>
+                    </div>
+
+                    <!-- Stats overview -->
+                    <div class="stats" style="margin-bottom: 15px;">
+                        <div class="stat-item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span id="downloadSpeed">0 B/s</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-users"></i>
+                            <span id="peerCount">0</span> Peers
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-chart-pie"></i>
+                            <span id="downloadProgress">0%</span>
+                        </div>
+                    </div>
+
+                    <div id="torrentList" class="torrent-list">
+                        <!-- Active Torrents will be injected here -->
+                    </div>
+                </div>
+
+                <!-- Media Player Section (spans full width if visible) -->
+                <div class="card hidden" id="playerSection" style="grid-column: 1 / -1;">
+                    <div class="section-header">
+                        <i class="fas fa-play-circle section-icon"></i>
+                        <h2>Media Player</h2>
+                    </div>
+                    <div class="file-info" style="margin-bottom: 10px;">
+                        <strong id="fileName">No file playing</strong>
+                    </div>
+                    <div class="player-container">
+                        <video id="videoPlayer" controls></video>
+                    </div>
+                </div>
+
+                <!-- Activity Log Section -->
+                <div class="card" style="grid-column: 1 / -1;">
+                    <div class="section-header" style="justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <i class="fas fa-terminal section-icon"></i>
+                            <h2>Activity Log</h2>
+                        </div>
+                        <button id="clearLog" class="btn btn-small">Clear Log</button>
+                    </div>
+                    
+                    <div id="logContainer" class="log-container">
+                        <div class="log-entry">
+                            <span class="log-time">System</span>
+                            <span class="log-type-info">Ready to share and download files.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div>TorrentShare - Next Generation P2P Serverless Torrent</div>
+            <div class="version">v1.0.0</div>
+        </footer>
+    </div>
+
+    <!-- Application Logic -->
+    <script src="js/app.js"></script>
+</body>
+</html>
